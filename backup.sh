@@ -13,6 +13,7 @@ function update {
         mv "$tempScriptLocation" "$existingScriptLocation"
         chmod +x "$existingScriptLocation"
         echo "Script updated successfully."
+        echo ----------------------------------------------------------------------
 
         # Optionally, you can run the updated script
         exec "$existingScriptLocation"
