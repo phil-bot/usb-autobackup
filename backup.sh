@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#VERSION=1
+
 function update {
     urlOfUpdatedVersion="https://raw.githubusercontent.com/phil-bot/usb-autobackup/master/backup.sh"
     existingScriptLocation="$(realpath "$0")"
