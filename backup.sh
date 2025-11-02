@@ -27,10 +27,6 @@ if [[ "$1" == "--update" ]]; then
     exit 0
 fi
 
-SERVER=nas.lan
-
-#!/bin/bash
-
 # CONFIG
 printf 'wait for heise.de .'
 until curl -s -f -o /dev/null "https://heise.de"
@@ -57,9 +53,6 @@ MOUNT_POINT=/dev/disk/by-label/Backup
 # VPN CONNECTION
 echo ----------------------------------------------------------------------
 echo "connect to vpn..."
-#/usr/bin/nmcli c up 'Wired connection 1'
-#/usr/bin/nmcli c up VPN
-#/usr/bin/nmcli c
 /usr/bin/nmcli con up id wg0
 echo ----------------------------------------------------------------------
 printf 'wait for %s .' "${SERVER}"
