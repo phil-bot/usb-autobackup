@@ -1,28 +1,29 @@
 #!/bin/bash
 
-#VERSION=1
+Version=0.1.1
 
 function update {
-    urlOfUpdatedVersion="https://raw.githubusercontent.com/phil-bot/usb-autobackup/master/backup.sh"
-    existingScriptLocation="$(realpath "$0")"
-    tempScriptLocation="/tmp/backup.sh"
+    VersionOnline=$(curl -s https://raw.githubusercontent.com/phil-bot/usb-autobackup/master/backup.sh | grep VERSION);
+    if [ ${Version} != ${VersionOnline#*=} ]
+    then
+        urlOfUpdatedVersion="https://raw.githubusercontent.com/phil-bot/usb-autobackup/master/backup.sh"
+        existingScriptLocation="$(realpath "$0")"
+        tempScriptLocation="/tmp/backup.sh"
+        # Download the updated version to a temporary location
+        wget -q -O "$tempScriptLocation" "$urlOfUpdatedVersion"
+        # Replace the current script with the updated version
+        if [[ -f "$tempScriptLocation" ]]; then
+            mv "$tempScriptLocation" "$existingScriptLocation"
+            chmod +x "$existingScriptLocation"
+            echo "Script updated successfully."
+            echo ----------------------------------------------------------------------
 
-    # Download the updated version to a temporary location
-    wget -q -O "$tempScriptLocation" "$urlOfUpdatedVersion"
-
-    # Replace the current script with the updated version
-    if [[ -f "$tempScriptLocation" ]]; then
-        mv "$tempScriptLocation" "$existingScriptLocation"
-        chmod +x "$existingScriptLocation"
-        echo "Script updated successfully."
-        echo ----------------------------------------------------------------------
-
-        # Optionally, you can run the updated script
-        exec "$existingScriptLocation"
-    else
-        echo "Failed to download the updated script."
-        exit 1
+        else
+            echo "Failed to download the updated script."
+            exit 1
+        fi
     fi
+    exec "$existingScriptLocation"
 }
 
 if [[ "$1" == "--update" ]]; then
