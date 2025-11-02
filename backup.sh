@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function update {
-    urlOfUpdatedVersion="https://raw.githubusercontent.com/phil-bot/usb-autobackup/refs/heads/master/backup.sh"
+    urlOfUpdatedVersion="https://raw.githubusercontent.com/phil-bot/usb-autobackup/master/backup.sh"
     existingScriptLocation="$(realpath "$0")"
     tempScriptLocation="/tmp/backup.sh"
 
@@ -15,7 +15,7 @@ function update {
         echo "Script updated successfully."
 
         # Optionally, you can run the updated script
- #       exec "$existingScriptLocation"
+        exec "$existingScriptLocation"
     else
         echo "Failed to download the updated script."
         exit 1
