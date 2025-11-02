@@ -1,8 +1,15 @@
 [Unit]
-Description=Autobackup
+Description=Auto Backup Service
+Wants=network-online.target
+After=network-online.target
 
 [Service]
-Type=oneshot
-ExecStart=/bin/bash /usr/local/sbin/backup.sh
-WorkingDirectory=/tmp
+Type=simple
+User=root
+WorkingDirectory=/root/
+ExecStart=/root/backup.sh --update
+StandardOutput=file:/home/phil/backup.log
+StandardError=file:/home/phil/backup.log
 
+[Install]
+WantedBy=multi-user.target
