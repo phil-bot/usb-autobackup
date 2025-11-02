@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="block", ATTRS{idVendor}=="1058", ATTRS{idProduct}=="2620", SYMLINK+="backup%n", OWNER="root", ENV{SYSTEMD_WANTS}="autobackup.service"
