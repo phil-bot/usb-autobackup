@@ -16,6 +16,7 @@ function update {
             mv "$tempScriptLocation" "$existingScriptLocation"
             chmod +x "$existingScriptLocation"
             echo "Script updated successfully."
+            UPDATED=true
             echo ----------------------------------------------------------------------
 
         else
@@ -69,6 +70,9 @@ done
 printf ' reachable.\n'
 
 ICH="Backup\-RaspberryPi in ${ORT} \(${POSTAL}\)"
+
+if [ $UPDATED ] && /usr/bin/telegram-send -M "*${ICH} updated successfully* (Version: ${Version}). \U0001f680"
+
 echo ----------------------------------------------------------------------
 echo "Unmount ${TARGET_DIR}"
 /usr/bin/umount ${TARGET_DIR}
