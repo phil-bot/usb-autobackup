@@ -28,16 +28,16 @@ if [[ "$1" == "--update" ]]; then
 fi
 
 # CONFIG
-printf 'wait for heise.de...'
+printf 'Wait for heise.de...'
 until curl -s -f -o /dev/null "https://heise.de"
 do
   sleep 5
   printf '.'
 done
-printf ' reachable...\n'
+printf ' reachable.\n'
 
 echo ----------------------------------------------------------------------
-printf 'get location: '
+printf 'Get location: '
 ORT=$(curl -s https://ipinfo.io/city)
 POSTAL=$(curl -s https://ipinfo.io/postal)
 
@@ -52,29 +52,29 @@ MOUNT_POINT=/dev/disk/by-label/Backup
 
 # VPN CONNECTION
 echo ----------------------------------------------------------------------
-echo "connect to vpn..."
+printf "Connect to VPN... "
 /usr/bin/nmcli con up id wg0
 echo ----------------------------------------------------------------------
-printf 'wait for %s .' "${SERVER}"
+printf 'Wait for %s...' "${SERVER}"
 while ! ping -c 1 -n -w 1 ${SERVER} &> /dev/null
 do
         #waiting..
         sleep 5
         printf '.'
 done
-printf ' reachable...\n'
+printf ' reachable.\n'
 
 ICH="Backup\-RaspberryPi in ${ORT} \(${POSTAL}\)"
 echo ----------------------------------------------------------------------
-echo "unmount ${TARGET_DIR}"
+echo "Unmount ${TARGET_DIR}"
 /usr/bin/umount ${TARGET_DIR}
 
 echo ----------------------------------------------------------------------
-echo "create ${TARGET_DIR}..."
+echo "Create ${TARGET_DIR}..."
 /usr/bin/mkdir -p ${TARGET_DIR} || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKann den Einhängepunkt nicht erstellen\."; exit; }
 
 echo ----------------------------------------------------------------------
-echo "mount ${TARGET_DIR}"
+echo "Mount ${TARGET_DIR}"
 /usr/bin/mount ${MOUNT_POINT} ${TARGET_DIR} || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nFestplatte nicht gefunden\.\."; exit; }
 
 sleep 3
@@ -82,7 +82,7 @@ sleep 3
 /usr/bin/telegram-send -M "*${ICH} meldet sich zum Dienst* \U0001f596 \n\nVerbindung mit *${SERVER//./\\.}* erfolgreich hergestellt\.\n\nBackup wird jetzt gestartet\."
 
 echo ----------------------------------------------------------------------
-echo "start rsync..."
+echo "Start rsync..."
 
 SECONDS=0
 
@@ -91,12 +91,12 @@ SECONDS=0
 duration=$SECONDS
 
 echo ----------------------------------------------------------------------
-echo "rsync done..."
+echo "Rsync done..."
 
 sleep 3
 
 echo ----------------------------------------------------------------------
-echo "umount ${TARGET_DIR}"
+echo "Umount ${TARGET_DIR}"
 /usr/bin/umount ${TARGET_DIR} || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKonnte die Festplatte nicht aushängen\."; exit; }
 /usr/bin/telegram-send -M "*${ICH} hat das Backup erfolgreich beendet* \U0001F64C \n\nGedauert hat das ganze $((duration / 60)) Minuten\.\n\nIch lege mich wieder Schlafen\."
 sleep 5
