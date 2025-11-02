@@ -28,7 +28,7 @@ if [[ "$1" == "--update" ]]; then
 fi
 
 # CONFIG
-printf 'wait for heise.de .'
+printf 'wait for heise.de...'
 until curl -s -f -o /dev/null "https://heise.de"
 do
   sleep 5
@@ -37,11 +37,11 @@ done
 printf ' reachable...\n'
 
 echo ----------------------------------------------------------------------
-printf 'get location...\n'
-ORT=$(curl https://ipinfo.io/city)
-POSTAL=$(curl https://ipinfo.io/postal)
+printf 'get location: '
+ORT=$(curl -s https://ipinfo.io/city)
+POSTAL=$(curl -s https://ipinfo.io/postal)
 
-printf '\nlocation: %s (%s)\n' "${ORT}" "${POSTAL}"
+printf '%s (%s)\n' "${ORT}" "${POSTAL}"
 
 SERVER=nas.lan
 
@@ -79,14 +79,14 @@ echo "mount ${TARGET_DIR}"
 
 sleep 3
 
-/usr/bin/telegram-send -M "*${ICH} meldet sich zum Dienst* \U0001f596 \n\nVerbindung mit *${SERVER//./\\.}* erfolgreich hergestellt\.\n\nBackup wird jetzt gestartet\.\n\>
+/usr/bin/telegram-send -M "*${ICH} meldet sich zum Dienst* \U0001f596 \n\nVerbindung mit *${SERVER//./\\.}* erfolgreich hergestellt\.\n\nBackup wird jetzt gestartet\."
 
 echo ----------------------------------------------------------------------
 echo "start rsync..."
 
 SECONDS=0
 
-/usr/bin/rsync -a --delete "${SOURCE_DIR}/" "${TARGET_DIR}" || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKopiervorgang nicht erfolgreich\.">
+/usr/bin/rsync -a --delete "${SOURCE_DIR}/" "${TARGET_DIR}" || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKopiervorgang nicht erfolgreich\."; exit; }
 
 duration=$SECONDS
 
@@ -98,9 +98,7 @@ sleep 3
 echo ----------------------------------------------------------------------
 echo "umount ${TARGET_DIR}"
 /usr/bin/umount ${TARGET_DIR} || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKonnte die Festplatte nicht aushängen\."; exit; }
-
-/usr/bin/telegram-send -M "*${ICH} hat das Backup erfolgreich beendet* \U0001F64C \n\nGedauert hat das ganze $((duration / 60)) Minuten\.\n\nIch lege mich wieder Schlafe>
-
+/usr/bin/telegram-send -M "*${ICH} hat das Backup erfolgreich beendet* \U0001F64C \n\nGedauert hat das ganze $((duration / 60)) Minuten\.\n\nIch lege mich wieder Schlafen\."
 sleep 5
 
 echo ----------------------------------------------------------------------
