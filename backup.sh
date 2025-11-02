@@ -1,8 +1,33 @@
 #!/bin/bash
 
-# eventuell vpn...
+function update {
+    urlOfUpdatedVersion="https://raw.githubusercontent.com/phil-bot/usb-autobackup/refs/heads/master/backup.sh"
+    existingScriptLocation="$(realpath "$0")"
+    tempScriptLocation="/tmp/backup.sh"
 
-SERVER=n3.grothu.lan
+    # Download the updated version to a temporary location
+    wget -q -O "$tempScriptLocation" "$urlOfUpdatedVersion"
+
+    # Replace the current script with the updated version
+    if [[ -f "$tempScriptLocation" ]]; then
+        mv "$tempScriptLocation" "$existingScriptLocation"
+        chmod +x "$existingScriptLocation"
+        echo "Script updated successfully." | /usr/bin/telegram-send
+
+        # Optionally, you can run the updated script
+        exec "$existingScriptLocation"
+    else
+        echo "Failed to download the updated script." | /usr/bin/telegram-send
+        exit 1
+    fi
+}
+
+if [[ "$1" == "--update" ]]; then
+    update
+    exit 0
+fi
+
+SERVER=nas.lan
 
 echo "waiting for ${SERVER}"
 while ! ping -c 1 -n -w 1 ${SERVER} &> /dev/null
