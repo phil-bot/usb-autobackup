@@ -12,12 +12,12 @@ function update {
     if [[ -f "$tempScriptLocation" ]]; then
         mv "$tempScriptLocation" "$existingScriptLocation"
         chmod +x "$existingScriptLocation"
-        echo "Script updated successfully." | /usr/bin/telegram-send
+        echo "Script updated successfully."
 
         # Optionally, you can run the updated script
-        exec "$existingScriptLocation"
+ #       exec "$existingScriptLocation"
     else
-        echo "Failed to download the updated script." | /usr/bin/telegram-send
+        echo "Failed to download the updated script."
         exit 1
     fi
 }
