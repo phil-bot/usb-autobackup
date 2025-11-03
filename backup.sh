@@ -110,6 +110,12 @@ echo "Umount ${TARGET_DIR}"
 sleep 5
 
 echo ----------------------------------------------------------------------
+
 ##echo shutdown.. bye bye..
+hdparm -y /dev/sda
+
+echo ----------------------------------------------------------------------
+
+/usr/bin/nmcli con down id wg0
 
 #shutdown now
