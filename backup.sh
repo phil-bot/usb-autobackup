@@ -72,7 +72,7 @@ printf ' reachable.\n'
 
 ICH="Backup\-RaspberryPi in ${ORT} \(${POSTAL}\)"
 
-if [ $UPDATED ] && /usr/bin/telegram-send -M "*${ICH} updated successfully* (Version: ${Version}). \U0001f680"
+[[ $UPDATED ]] && /usr/bin/telegram-send -M "*${ICH} updated successfully* (Version: ${Version}). \U0001f680"
 
 echo ----------------------------------------------------------------------
 echo "Unmount ${TARGET_DIR}"
