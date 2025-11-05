@@ -32,7 +32,7 @@ if [[ "$1" == "--update" ]]; then
     update
     exit 0
 fi
-
+exit
 # CONFIG
 printf 'Wait for heise.de...'
 until curl -s -f -o /dev/null "https://heise.de"
