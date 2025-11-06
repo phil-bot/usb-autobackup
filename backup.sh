@@ -27,11 +27,8 @@ function update {
     exec "$existingScriptLocation"
 }
 
-if [[ "$1" == "--update" ]]; then
-    update
-    exit 0
-fi
-exit
+
+
 # CONFIG
 printf 'Wait for heise.de...'
 until curl -s -f -o /dev/null "https://heise.de"
@@ -42,6 +39,14 @@ done
 printf ' reachable.\n'
 
 echo ----------------------------------------------------------------------
+
+
+if [[ "$1" == "--update" ]]; then
+    update
+    exit 0
+fi
+
+
 printf 'Get location: '
 ORT=$(curl -s https://ipinfo.io/city)
 POSTAL=$(curl -s https://ipinfo.io/postal)
