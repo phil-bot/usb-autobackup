@@ -1,6 +1,6 @@
 #!/bin/bash
 
-Version="0.1.1"
+Version="6.11.25"
 
 function update {
     existingScriptLocation="$(realpath "$0")"
