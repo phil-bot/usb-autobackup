@@ -4,7 +4,7 @@ Version="0.1.1"
 
 function update {
     existingScriptLocation="$(realpath "$0")"
-    VersionOnline="$(curl -s https://raw.githubusercontent.com/phil-bot/usb-autobackup/master/backup.sh | grep VERSION)"
+    VersionOnline="$(curl -s https://raw.githubusercontent.com/phil-bot/usb-autobackup/master/backup.sh | grep Version)"
     if [[ "${Version}" != "${VersionOnline#*=}" ]]; then
         urlOfUpdatedVersion="https://raw.githubusercontent.com/phil-bot/usb-autobackup/master/backup.sh"
 
