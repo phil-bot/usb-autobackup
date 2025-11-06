@@ -60,10 +60,7 @@ TARGET_DIR=/mnt/backup
 MOUNT_POINT=/dev/disk/by-label/Backup
 
 
-# VPN CONNECTION
-echo ----------------------------------------------------------------------
-printf "Connect to VPN... "
-/usr/bin/nmcli con up id wg0
+
 echo ----------------------------------------------------------------------
 printf 'Wait for %s...' "${SERVER}"
 while ! ping -c 1 -n -w 1 ${SERVER} &> /dev/null
@@ -71,6 +68,11 @@ do
         #waiting..
         sleep 5
         printf '.'
+        # VPN CONNECTION
+        echo ----------------------------------------------------------------------
+        printf "Connect to VPN... "
+        /usr/bin/nmcli con up id wg0
+
 done
 printf ' reachable.\n'
 
