@@ -109,10 +109,10 @@ logn "umount ${TARGET_DIR}"
 sleep 5
 
 ##echo shutdown.. bye bye..
-log "put HD to sleep."
-$(hdparm -y /dev/sda)
+logn "put HD to sleep."
+hdparm -y /dev/sda
 
 logn "disconnect from VPN."
-$(/usr/bin/nmcli con down id wg0)
+/usr/bin/nmcli con down id wg0
 
 #shutdown now
