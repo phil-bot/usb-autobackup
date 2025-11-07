@@ -109,7 +109,7 @@ logn "umount ${TARGET_DIR}"
 sleep 5
 
 ##echo shutdown.. bye bye..
-logn "put HD to sleep."
+logn "put HDD to sleep."
 hdparm -y /dev/sda
 
 logn "disconnect from VPN."
