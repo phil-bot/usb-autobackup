@@ -26,7 +26,7 @@ printf ' reachable.\n'
 
 
 # Update Check
-VersionOnline="$(curl -s ${urlOfUpdatedVersion} | grep Version)"
+VersionOnline="$(curl -s ${urlOfUpdatedVersion} | grep -m 1 Version)"
 if [[ "${Version}" != "${VersionOnline#*=}" ]]; then
     
     # Download the updated version to a temporary location
