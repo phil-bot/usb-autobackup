@@ -41,7 +41,7 @@ else
         mv "$tempScriptLocation" "$existingScriptLocation"
         chmod +x "$existingScriptLocation"
         logn 'Script updated successfully.'
-        UPDATED="true"
+        UPDATED=true
         exec $existingScriptLocation
     else
         logn 'Failed to download the updated script.'
