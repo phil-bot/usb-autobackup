@@ -25,22 +25,24 @@ do
 done
 printf ' reachable.\n'
 
+# Download the online version to a temporary location
+wget -q -O "$tempScriptLocation" "$urlOfUpdatedVersion"
 
 # Update Check
-if cmp --silent -- "$existingScriptLocation" "$(curl -s ${urlOfUpdatedVersion})"; then
+if cmp --silent -- "$existingScriptLocation" "$tempScriptLocation"; then
     echo "No update needed."
 else
-    # Download the updated version to a temporary location
-    wget -q -O "$tempScriptLocation" "$urlOfUpdatedVersion"
     # Replace the current script with the updated version
     if [[ -f "$tempScriptLocation" ]]; then
         mv "$tempScriptLocation" "$existingScriptLocation"
         chmod +x "$existingScriptLocation"
         echo "Script updated successfully."
         UPDATED=true
+        rm $tempScriptLocation
         exec $existingScriptLocation
     else
         echo "Failed to download the updated script."
+        rm $tempScriptLocation
         exit 1
     fi
 fi
