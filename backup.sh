@@ -54,7 +54,8 @@ POSTAL=$(curl -s https://ipinfo.io/postal)
 printf '%s (%s)\n' "${ORT}" "${POSTAL}"
 
 # Check for Server
-logger 'Wait for %s...' "${SERVER}"
+logger 'Wait for '
+printf "${SERVER}..."
 while ! ping -c 1 -n -w 1 ${SERVER} &> /dev/null
 do
     #waiting..
@@ -73,20 +74,20 @@ if [[ $UPDATED == true ]]; then
     /usr/bin/telegram-send -M "*${ICH} updated successfully* (Version: ${Version}). \U0001f680"
 fi
 
-logger "umount ${TARGET_DIR}"
+logger 'umount ${TARGET_DIR}\n'
 /usr/bin/umount ${TARGET_DIR}
 
-logger "create ${TARGET_DIR}..."
+logger 'create ${TARGET_DIR}...\n'
 /usr/bin/mkdir -p ${TARGET_DIR} || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKann den Einhängepunkt nicht erstellen\."; exit; }
 
-logger "mount ${TARGET_DIR}"
+logger 'mount ${TARGET_DIR}\n'
 /usr/bin/mount ${MOUNT_POINT} ${TARGET_DIR} || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nFestplatte nicht gefunden\.\."; exit; }
 
 sleep 3
 
 /usr/bin/telegram-send -M "*${ICH} meldet sich zum Dienst* \U0001f596 \n\nVerbindung mit *${SERVER//./\\.}* erfolgreich hergestellt\.\n\nBackup wird jetzt gestartet\."
 
-logger "start rsync..."
+logger 'start rsync...\n'
 
 SECONDS=0
 
@@ -94,20 +95,20 @@ SECONDS=0
 
 duration=$SECONDS
 
-logger "rsync done..."
+logger 'rsync done...\n'
 
 sleep 3
 
-logger "umount ${TARGET_DIR}"
+logger 'umount ${TARGET_DIR}\n'
 /usr/bin/umount ${TARGET_DIR} || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKonnte die Festplatte nicht aushängen\."; exit; }
 /usr/bin/telegram-send -M "*${ICH} hat das Backup erfolgreich beendet* \U0001F64C \n\nGedauert hat das ganze $((duration / 60)) Minuten\.\n\nIch lege mich wieder Schlafen\."
 sleep 5
 
 ##echo shutdown.. bye bye..
-logger "put HD to sleep"
+logger 'put HD to sleep.\n'
 hdparm -y /dev/sda
 
-logger "disconnect from VPN"
+logger 'disconnect from VPN.\n'
 /usr/bin/nmcli con down id wg0
 
 #shutdown now
