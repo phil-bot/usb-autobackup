@@ -41,7 +41,7 @@ else
         mv "$tempScriptLocation" "$existingScriptLocation"
         chmod +x "$existingScriptLocation"
         logn 'Script updated successfully.'
-        UPDATED=true
+        UPDATED="true"
         exec $existingScriptLocation
     else
         logn 'Failed to download the updated script.'
@@ -74,7 +74,7 @@ printf 'reachable.\n'
 
 ICH="Backup\-RaspberryPi in ${ORT} \(${POSTAL}\)"
 
-if [[ $UPDATED == true ]]; then
+if [[ "$UPDATED" == "true" ]]; then
     /usr/bin/telegram-send -M "*${ICH} updated successfully* (Version: ${Version}). \U0001f680"
 fi
 
@@ -95,7 +95,7 @@ logn "start rsync..."
 
 SECONDS=0
 
-#/usr/bin/rsync -a --delete "${SOURCE_DIR}/" "${TARGET_DIR}" || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKopiervorgang nicht erfolgreich\."; exit; }
+/usr/bin/rsync -a --delete "${SOURCE_DIR}/" "${TARGET_DIR}" || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKopiervorgang nicht erfolgreich\."; exit; }
 
 duration=$SECONDS
 
