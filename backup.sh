@@ -30,18 +30,17 @@ wget -q -O "$tempScriptLocation" "$urlOfUpdatedVersion"
 
 # Update Check
 if cmp --silent -- "$existingScriptLocation" "$tempScriptLocation"; then
-    logger "No script update needed."
+    logger 'No script update needed.\n'
 else
     # Replace the current script with the updated version
     if [[ -f "$tempScriptLocation" ]]; then
         mv "$tempScriptLocation" "$existingScriptLocation"
         chmod +x "$existingScriptLocation"
-        logger "Script updated successfully."
+        logger 'Script updated successfully.'\n
         UPDATED=true
-        rm $tempScriptLocation
         exec $existingScriptLocation
     else
-        logger "Failed to download the updated script."
+        logger 'Failed to download the updated script.\n'
         rm $tempScriptLocation
         exit 1
     fi
