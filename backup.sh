@@ -78,41 +78,41 @@ if [[ $UPDATED == true ]]; then
     /usr/bin/telegram-send -M "*${ICH} updated successfully* (Version: ${Version}). \U0001f680"
 fi
 
-logn 'umount ${TARGET_DIR}'
+logn "umount ${TARGET_DIR}"
 /usr/bin/umount ${TARGET_DIR}
 
-logn 'create ${TARGET_DIR}'
+logn "create ${TARGET_DIR}"
 /usr/bin/mkdir -p ${TARGET_DIR} || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKann den Einhängepunkt nicht erstellen\."; exit; }
 
-logn 'mount ${TARGET_DIR}'
+logn "mount ${TARGET_DIR}"
 /usr/bin/mount ${MOUNT_POINT} ${TARGET_DIR} || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nFestplatte nicht gefunden\.\."; exit; }
 
 sleep 3
 
 /usr/bin/telegram-send -M "*${ICH} meldet sich zum Dienst* \U0001f596 \n\nVerbindung mit *${SERVER//./\\.}* erfolgreich hergestellt\.\n\nBackup wird jetzt gestartet\."
 
-logn 'start rsync...'
-exit
+logn "start rsync..."
+
 SECONDS=0
 
-/usr/bin/rsync -a --delete "${SOURCE_DIR}/" "${TARGET_DIR}" || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKopiervorgang nicht erfolgreich\."; exit; }
+#/usr/bin/rsync -a --delete "${SOURCE_DIR}/" "${TARGET_DIR}" || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKopiervorgang nicht erfolgreich\."; exit; }
 
 duration=$SECONDS
 
-logn 'rsync done...'
+logn "rsync done..."
 
 sleep 3
 
-logn 'umount ${TARGET_DIR}'
+logn "umount ${TARGET_DIR}"
 /usr/bin/umount ${TARGET_DIR} || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKonnte die Festplatte nicht aushängen\."; exit; }
 /usr/bin/telegram-send -M "*${ICH} hat das Backup erfolgreich beendet* \U0001F64C \n\nGedauert hat das ganze $((duration / 60)) Minuten\.\n\nIch lege mich wieder Schlafen\."
 sleep 5
 
 ##echo shutdown.. bye bye..
-log 'put HD to sleep.'
+log "put HD to sleep."
 hdparm -y /dev/sda
 
-logn 'disconnect from VPN.'
+logn "disconnect from VPN."
 /usr/bin/nmcli con down id wg0
 
 #shutdown now
