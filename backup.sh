@@ -23,7 +23,7 @@ do
   sleep 5
   printf '.'
 done
-printf ' reachable.\n'
+printf 'reachable.\n'
 
 # Download the online version to a temporary location
 wget -q -O "$tempScriptLocation" "$urlOfUpdatedVersion"
@@ -54,9 +54,6 @@ POSTAL=$(curl -s https://ipinfo.io/postal)
 
 printf '%s (%s)\n' "${ORT}" "${POSTAL}"
 
-
-exit
-
 # Check for Server
 printf 'Wait for %s...' "${SERVER}"
 while ! ping -c 1 -n -w 1 ${SERVER} &> /dev/null
@@ -69,7 +66,7 @@ do
     /usr/bin/nmcli con up id wg0
 
 done
-printf ' reachable.\n'
+printf 'reachable.\n'
 
 ICH="Backup\-RaspberryPi in ${ORT} \(${POSTAL}\)"
 
