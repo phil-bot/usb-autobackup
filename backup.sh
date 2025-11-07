@@ -2,8 +2,6 @@
 
 
 # CONFIG
-Version="7.11.25"
-
 SERVER=nas.lan
 SOURCE_DIR=${SERVER}:/mnt/nvme
 TARGET_DIR=/mnt/backup
@@ -13,7 +11,10 @@ urlOfUpdatedVersion="https://raw.githubusercontent.com/phil-bot/usb-autobackup/m
 existingScriptLocation="$(realpath "$0")"
 tempScriptLocation=$(mktemp)
 
+echo -----------------------------------------------------
 date
+echo -----------------------------------------------------
+
 
 # Online Check
 printf 'Wait for github.com...'
@@ -26,9 +27,10 @@ printf ' reachable.\n'
 
 
 # Update Check
-VersionOnline="$(curl -s ${urlOfUpdatedVersion} | grep -m 1 Version)"
-if [[ "${Version}" != "${VersionOnline#*=}" ]]; then
-    
+if cmp --silent -- "$existingScriptLocation" "$(curl -s ${urlOfUpdatedVersion})"; then
+    echo "No update needed."
+else
+    echo "Local: ${Version}"
     # Download the updated version to a temporary location
     wget -q -O "$tempScriptLocation" "$urlOfUpdatedVersion"
     # Replace the current script with the updated version
@@ -51,6 +53,8 @@ POSTAL=$(curl -s https://ipinfo.io/postal)
 
 printf '%s (%s)\n' "${ORT}" "${POSTAL}"
 
+
+exit
 
 # Check for Server
 printf 'Wait for %s...' "${SERVER}"
