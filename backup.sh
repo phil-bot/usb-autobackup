@@ -30,7 +30,6 @@ printf ' reachable.\n'
 if cmp --silent -- "$existingScriptLocation" "$(curl -s ${urlOfUpdatedVersion})"; then
     echo "No update needed."
 else
-    echo "Local: ${Version}"
     # Download the updated version to a temporary location
     wget -q -O "$tempScriptLocation" "$urlOfUpdatedVersion"
     # Replace the current script with the updated version
