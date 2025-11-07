@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function logger() {
-    printf '%s %s' "$(date)" "${@}"
+    printf '%s %s' '$(date)' '${@}'
 }
 
 # CONFIG
@@ -88,7 +88,7 @@ sleep 3
 /usr/bin/telegram-send -M "*${ICH} meldet sich zum Dienst* \U0001f596 \n\nVerbindung mit *${SERVER//./\\.}* erfolgreich hergestellt\.\n\nBackup wird jetzt gestartet\."
 
 logger 'start rsync...\n'
-
+exit
 SECONDS=0
 
 /usr/bin/rsync -a --delete "${SOURCE_DIR}/" "${TARGET_DIR}" || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKopiervorgang nicht erfolgreich\."; exit; }
