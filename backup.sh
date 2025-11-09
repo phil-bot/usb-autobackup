@@ -29,6 +29,15 @@ do
 done
 printf 'reachable.\n'
 
+# Get Location
+log 'Get location: '
+ORT=$(curl -s https://ipinfo.io/city)
+POSTAL=$(curl -s https://ipinfo.io/postal)
+
+printf '%s (%s)\n' "${ORT}" "${POSTAL}"
+
+ICH="Backup\-RaspberryPi in ${ORT} \(${POSTAL}\)"
+
 # Download the online version to a temporary location
 wget -q -O "$tempScriptLocation" "$urlOfUpdatedVersion"
 
@@ -41,21 +50,15 @@ else
         mv "$tempScriptLocation" "$existingScriptLocation"
         chmod +x "$existingScriptLocation"
         logn 'Script updated successfully.'
-        UPDATED=true
+        /usr/bin/telegram-send -M "*${ICH} updated successfully*. \U0001f680"
         exec $existingScriptLocation
     else
         logn 'Failed to download the updated script.'
+        /usr/bin/telegram-send -M "*${ICH} Update fehlgeschlagen*. \U0001f680"
         rm $tempScriptLocation
         exit 1
     fi
 fi
-
-# Get Location
-log 'Get location: '
-ORT=$(curl -s https://ipinfo.io/city)
-POSTAL=$(curl -s https://ipinfo.io/postal)
-
-printf '%s (%s)\n' "${ORT}" "${POSTAL}"
 
 # Check for Server
 log 'Wait for '
@@ -71,12 +74,6 @@ do
 
 done
 printf 'reachable.\n'
-
-ICH="Backup\-RaspberryPi in ${ORT} \(${POSTAL}\)"
-
-if [[ "$UPDATED" == "true" ]]; then
-    /usr/bin/telegram-send -M "*${ICH} updated successfully* (Version: ${Version}). \U0001f680"
-fi
 
 logn "umount ${TARGET_DIR}"
 /usr/bin/umount ${TARGET_DIR}
@@ -111,8 +108,5 @@ sleep 5
 ##echo shutdown.. bye bye..
 logn "put HDD to sleep."
 hdparm -y /dev/sda
-
-logn "disconnect from VPN."
-/usr/bin/nmcli con down id wg0
 
 #shutdown now
