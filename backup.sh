@@ -76,7 +76,7 @@ done
 printf 'reachable.\n'
 
 logn "umount ${TARGET_DIR}"
-/usr/bin/umount ${TARGET_DIR}
+/usr/bin/umount ${TARGET_DIR} || /bin/true
 
 logn "create ${TARGET_DIR}"
 /usr/bin/mkdir -p ${TARGET_DIR} || { /usr/bin/telegram-send -M "*${ICH} meldet einen FEHLER* \U00026A0 \n\nKann den Einhängepunkt nicht erstellen\."; exit; }
