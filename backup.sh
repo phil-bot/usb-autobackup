@@ -20,6 +20,8 @@ tempScriptLocation=$(mktemp)
 
 echo -----------------------------------------------------
 
+/usr/bin/telegram-send -M "Online Check"
+
 # Online Check
 log 'Wait for github.com...'
 until curl -s -f -o /dev/null "https://github.com"
@@ -28,6 +30,8 @@ do
   printf '.'
 done
 printf 'reachable.\n'
+
+/usr/bin/telegram-send -M "Get Location"
 
 # Get Location
 log 'Get location: '
@@ -38,8 +42,13 @@ printf '%s (%s)\n' "${ORT}" "${POSTAL}"
 
 ICH="Backup\-RaspberryPi in ${ORT} \(${POSTAL}\)"
 
+/usr/bin/telegram-send -M "Download"
+
 # Download the online version to a temporary location
 wget -q -O "$tempScriptLocation" "$urlOfUpdatedVersion"
+
+
+/usr/bin/telegram-send -M "Update Check"
 
 # Update Check
 if cmp --silent -- "$existingScriptLocation" "$tempScriptLocation"; then
@@ -59,6 +68,9 @@ else
         exit 1
     fi
 fi
+
+
+/usr/bin/telegram-send -M "Check for Server"
 
 # Check for Server
 log 'Wait for '
